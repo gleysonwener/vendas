@@ -32,9 +32,9 @@
 
         <div class="col">
             {% if user.is_authenticated %}
-                <p>Ola {{user.username }}
+                <p>Ola {{ request.session.message }}
                     <a href="{% url 'logout' %}">
-                        <span class="badge badge-dark">Sair</span>
+                        <span class="badge badge-dark">Sair</span><a href="{% url 'password_change' %}">Alterar senha</a><br>
                     </a>
                 </p>
 

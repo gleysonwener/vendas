@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+<h1>Lista de pessoas</h1>
+<p>{{ mesages }}</p>
+{% for person in persons%}
+    <a href="{% url 'person_datail.cbv' person.pk %}">{{ person }}</a>
+{% endfor %}
+<a href="{% url 'person_create.cbv' %}">Novo</a>
