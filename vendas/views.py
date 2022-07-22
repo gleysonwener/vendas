@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -81,8 +82,21 @@ class NovoItemPedido(View):
 
 class ListaVendas(View):
     def get(self, request):
+
+        '''vendas = Venda.objects.all()
+
+        return render(request, 'vendas/lista-vendas.html', {'vendas': vendas})'''
+        faturamento = Venda.objects.all().aggregate(Sum('valor')).get('valor__sum', 0.00)
         vendas = Venda.objects.all()
-        return render(request, 'vendas/lista-vendas.html', {'vendas': vendas})
+
+        context = {
+            'vendas': vendas,
+            'faturamento': faturamento,
+        }
+
+        return render(request, 'vendas/lista-vendas.html', context)
+
+
 
 
 class EditPedido(View):

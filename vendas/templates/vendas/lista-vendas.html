@@ -3,6 +3,7 @@
 
 {% block main %}
     <h2>Listagem de vendas</h2>
+    <h3>Faturamento: R$ {{ faturamento }}</h3>
     <a href="{% url 'novo-pedido' %}">Nova venda</a>
     <table class="table">
       <thead>
