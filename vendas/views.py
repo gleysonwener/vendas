@@ -82,21 +82,19 @@ class NovoItemPedido(View):
 
 class ListaVendas(View):
     def get(self, request):
-
-        '''vendas = Venda.objects.all()
-
-        return render(request, 'vendas/lista-vendas.html', {'vendas': vendas})'''
         faturamento = Venda.objects.all().aggregate(Sum('valor')).get('valor__sum', 0.00)
+        total_custo = Venda.objects.all().aggregate(Sum('valor_custo_total')).get('valor_custo_total__sum', 0.00)
+        lucro = float(faturamento) - float(total_custo)
         vendas = Venda.objects.all()
 
         context = {
             'vendas': vendas,
             'faturamento': faturamento,
+            'total_custo': total_custo,
+            'lucro': lucro,
         }
 
         return render(request, 'vendas/lista-vendas.html', context)
-
-
 
 
 class EditPedido(View):
