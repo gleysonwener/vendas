@@ -19,7 +19,12 @@ from django.urls import reverse_lazy
 
 @login_required
 def persons_list(request):
-    persons = Person.objects.all()
+    termo_busca = request.GET.get('pesquisa', None)
+
+    if termo_busca:
+        persons = Person.objects.filter(first_name__icontains=termo_busca) | Person.objects.filter(last_name__icontains=termo_busca)
+    else:
+        persons = Person.objects.all()
 
     return render(
         request, 'person.html', {'persons': persons})

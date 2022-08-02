@@ -7,6 +7,7 @@ from .models import ItemDoPedido
 from .forms import ItemPedidoForm, ItemDoPedidoForm
 
 
+
 class DashboardView(View):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.has_perm('vendas.ver_dashboard'):
@@ -85,13 +86,15 @@ class ListaVendas(View):
         faturamento = Venda.objects.all().aggregate(Sum('valor')).get('valor__sum', 0.00)
         total_custo = Venda.objects.all().aggregate(Sum('valor_custo_total')).get('valor_custo_total__sum', 0.00)
         lucro = float(faturamento) - float(total_custo)
-        vendas = Venda.objects.all()
+        vendas = Venda.objects.all().order_by('-id')
+        vendas_count = vendas.count()
 
         context = {
             'vendas': vendas,
             'faturamento': faturamento,
             'total_custo': total_custo,
             'lucro': lucro,
+            'vendas_count': vendas_count,
         }
 
         return render(request, 'vendas/lista-vendas.html', context)

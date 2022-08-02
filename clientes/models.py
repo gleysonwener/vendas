@@ -17,11 +17,16 @@ class Person(models.Model):
     bio = models.TextField()
     photo = models.ImageField(upload_to='clients_photos', null=True, blank=True)
     doc = models.OneToOneField(Documento, null=True, blank=True, on_delete=models.CASCADE)
+    telefone = models.CharField(max_length=20, null=True, blank=True)
+
 
     class Meta:
         permissions = (
             ('deletar_clientes', 'Deletar clientes'),
         )
+
+        unique_together = (('first_name', 'telefone'),)
+
 
     def save(self, *args, **kwargs):
         super(Person, self).save(*args, **kwargs)

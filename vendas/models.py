@@ -8,6 +8,16 @@ from .managers import VendaManager
 
 
 class Venda(models.Model):
+    ABERTA = 'AB'
+    FECHADA = 'FC'
+    PROCESSANDO = 'PR'
+    DESCONHECIDO = 'DC'
+    STATUS = (
+        (ABERTA, 'Aberta'),
+        (FECHADA, 'Fechada'),
+        (PROCESSANDO, 'Processando'),
+        (DESCONHECIDO, 'Desconhecido'),
+    )
     numero = models.CharField(max_length=7)
     valor_custo_total = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     valor = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
@@ -15,6 +25,7 @@ class Venda(models.Model):
     impostos = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     pessoa = models.ForeignKey(Person, null=True, blank=True, on_delete=models.PROTECT)
     nfe_emitida = models.BooleanField(default=False)
+    status = models.CharField(choices=STATUS, default=DESCONHECIDO, max_length=2)
 
     objects = VendaManager()
 
@@ -24,6 +35,8 @@ class Venda(models.Model):
             ('ver_dashboard', 'Pode visualizar a dashboard'),
             ('permissao3', 'Permissão 3'),
         )
+
+
 
     def calcular_total(self):
         # calcula o valor total do pedido
@@ -54,6 +67,10 @@ class ItemDoPedido(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     quantidade = models.FloatField()
     desconto = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        unique_together = (('venda', 'produto'),)
+
 
     def __str__(self):
         return self.venda.numero + ' - ' + self.produto.descricao

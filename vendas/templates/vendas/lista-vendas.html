@@ -3,9 +3,12 @@
 
 {% block main %}
     <h2>Listagem de vendas</h2>
+
     <h3>Faturamento: R$ {{ faturamento }}</h3>
     <h3>Custo Total: R$ {{ total_custo }}</h3>
     <h3>Lucro: R$ {{ lucro }}</h3>
+    <h3>Total de Vendas: {{ vendas_count }} vend{{ vendas_count|pluralize:"a,as" }}</h3>
+
     <a href="{% url 'novo-pedido' %}">Nova venda</a>
     <table class="table">
       <thead>
@@ -14,7 +17,9 @@
           <th scope="col">Numero</th>
           <th scope="col">Desconto</th>
           <th scope="col">Valor</th>
+          <th scope="col">Status</th>
           <th scope="col">Editar</th>
+          <th scope="col">Excluir</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +29,7 @@
                 <td>{{ venda.numero }}</td>
                 <td>{{ venda.desconto }}</td>
                 <td>{{ venda.valor }}</td>
+                <td>{{ venda.status }}</td>
                 <td>
                     <a href="{% url 'edit-pedido' venda.id %}">
                         Editar
